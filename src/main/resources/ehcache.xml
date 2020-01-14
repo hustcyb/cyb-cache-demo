@@ -11,7 +11,7 @@
         <key-type>java.lang.Long</key-type>
         <value-type>com.cyb.cache.demo.domain.Course</value-type>
         <expiry>
-            <ttl unit="seconds">10</ttl>
+            <ttl unit="seconds">30</ttl>
         </expiry>
         <listeners>
             <listener>

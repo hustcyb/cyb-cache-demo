@@ -1,11 +1,15 @@
 package com.cyb.cache.demo.config;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.cache.CacheManager;
 import javax.cache.Caching;
+import javax.cache.spi.CachingProvider;
+
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheEventListenerConfigurationBuilder;
@@ -27,7 +31,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 import org.springframework.data.redis.serializer.RedisSerializer;
-
 import com.cyb.cache.demo.domain.Course;
 import com.cyb.cache.demo.domain.Product;
 import com.cyb.cache.demo.ehcache.LoggingCacheEventListener;
@@ -96,9 +99,10 @@ public class CacheConfig {
 	 * 初始化JCache缓存管理程序
 	 * 
 	 * @return JCache缓存管理程序
+	 * @throws URISyntaxException 
 	 */
 	@Bean
-	public JCacheCacheManager jcacheCacheManager() {
+	public JCacheCacheManager jcacheCacheManager() throws URISyntaxException {
 		CacheEventListenerConfigurationBuilder listenerConfigurationBuilder = CacheEventListenerConfigurationBuilder
 				.newEventListenerConfiguration(new LoggingCacheEventListener(),
 						EventType.CREATED, EventType.UPDATED,
@@ -125,5 +129,13 @@ public class CacheConfig {
 				ehcacheCachingProvider.getDefaultURI(), defaultConfiguration);
 
 		return new JCacheCacheManager(cacheManager);
+		
+//		Class<?> clazz = getClass();
+//		CachingProvider cachingProvider = Caching.getCachingProvider();
+//		ClassLoader classLoader = clazz.getClassLoader();
+//		URI uri = clazz.getResource("/ehcache.xml").toURI();
+//		CacheManager cacheManager = cachingProvider.getCacheManager(uri, classLoader);
+//		
+//		return new JCacheCacheManager(cacheManager);
 	}
 }
